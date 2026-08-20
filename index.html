@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PC School - ভর্তি আবেদন ফরম</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f0f4f8; margin: 0; padding: 20px; }
+    .form-card { max-width: 800px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    .header { text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 15px; margin-bottom: 25px; }
+    .header h1 { margin: 0; color: #1a365d; font-size: 28px; }
+    .header p { margin: 5px 0 0; color: #4a5568; }
+    
+    .section-title { background: #2b6cb0; color: white; padding: 8px 15px; border-radius: 5px; font-size: 18px; margin-top: 25px; margin-bottom: 15px; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    
+    label { font-weight: 600; margin-bottom: 5px; color: #2d3748; font-size: 14px; }
+    input, select, textarea { padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.2); }
+    
+    .btn-submit { width: 100%; padding: 14px; background: #2f855a; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; transition: background 0.3s; }
+    .btn-submit:hover { background: #276749; }
+    #status { margin-top: 20px; text-align: center; font-weight: bold; font-size: 16px; }
+  </style>
+</head>
+<body>
+
+  <div class="form-card">
+    <div class="header">
+      <h1>PC SCHOOL</h1>
+      <p>অনলাইন ভর্তি আবেদন ফরম - ২০২৬</p>
+    </div>
+
+    <form id="admissionForm">
+      
+      <!-- ১. শিক্ষার্থীর তথ্য -->
+      <div class="section-title">১. শিক্ষার্থীর তথ্য</div>
+      <div class="grid">
+        <div class="form-group">
+          <label>শিক্ষার্থীর নাম (বাংলায়) *</label>
+          <input type="text" name="nameBn" required placeholder="বাংলায় নাম লিখুন">
+        </div>
+        <div class="form-group">
+          <label>Student Name (English) *</label>
+          <input type="text" name="nameEn" required placeholder="Name in Block Capital">
+        </div>
+        <div class="form-group">
+          <label>ভর্তির শ্রেণী *</label>
+          <select name="targetClass" required>
+            <option value="">শ্রেণী নির্বাচন করুন</option>
+            <option value="Class 6">৬ষ্ঠ শ্রেণী</option>
+            <option value="Class 7">৭ম শ্রেণী</option>
+            <option value="Class 8">৮ম শ্রেণী</option>
+            <option value="Class 9">৯ম শ্রেণী</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>জন্ম নিবন্ধন নম্বর *</label>
+          <input type="number" name="birthReg" required placeholder="17 ডিজিটের জন্ম সনদ নম্বর">
+        </div>
+        <div class="form-group">
+          <label>জন্ম তারিখ *</label>
+          <input type="date" name="dob" required>
+        </div>
+        <div class="form-group">
+          <label>লিঙ্গ *</label>
+          <select name="gender" required>
+            <option value="">নির্বাচন করুন</option>
+            <option value="Male">ছাত্র</option>
+            <option value="Female">ছাত্রী</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>ধর্ম *</label>
+          <select name="religion" required>
+            <option value="">নির্বাচন করুন</option>
+            <option value="Islam">ইসলাম</option>
+            <option value="Hinduism">হিন্দু</option>
+            <option value="Buddhism">বৌদ্ধ</option>
+            <option value="Christianity">খ্রিস্টান</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>রক্তের গ্রুপ</label>
+          <select name="bloodGroup">
+            <option value="">নির্বাচন করুন</option>
+            <option value="A+">A+</option><option value="A-">A-</option>
+            <option value="B+">B+</option><option value="B-">B-</option>
+            <option value="O+">O+</option><option value="O-">O-</option>
+            <option value="AB+">AB+</option><option value="AB-">AB-</option>
+          </select>
+        </div>
+        <div class="form-group full-width">
+          <label>পূর্ববর্তী বিদ্যালয়ের নাম (যদি থাকে)</label>
+          <input type="text" name="prevSchool" placeholder="আগের স্কুলের নাম লিখুন">
+        </div>
+      </div>
+
+      <!-- ২. পিতা ও মাতার তথ্য -->
+      <div class="section-title">২. পিতা ও মাতার তথ্য</div>
+      <div class="grid">
+        <div class="form-group">
+          <label>পিতার নাম *</label>
+          <input type="text" name="fatherName" required placeholder="পিতার পুরো নাম">
+        </div>
+        <div class="form-group">
+          <label>পিতার এনআইডি (NID) *</label>
+          <input type="number" name="fatherNid" required placeholder="NID নম্বর">
+        </div>
+        <div class="form-group">
+          <label>পিতার মোবাইল নম্বর *</label>
+          <input type="tel" name="fatherPhone" required placeholder="017xxxxxxxx">
+        </div>
+        <div class="form-group">
+          <label>মাতার নাম *</label>
+          <input type="text" name="motherName" required placeholder="মাতার পুরো নাম">
+        </div>
+        <div class="form-group">
+          <label>মাতার এনআইডি (NID)</label>
+          <input type="number" name="motherNid" placeholder="NID নম্বর">
+        </div>
+      </div>
+
+      <!-- ৩. অভিভাবকের তথ্য (পিতা/মাতার অনুপস্থিতিতে) -->
+      <div class="section-title">৩. অভিভাবকের তথ্য (ঐচ্ছিক)</div>
+      <div class="grid">
+        <div class="form-group">
+          <label>অভিভাবকের নাম</label>
+          <input type="text" name="guardianName" placeholder="অভিভাবকের নাম">
+        </div>
+        <div class="form-group">
+          <label>সম্পর্ক</label>
+          <input type="text" name="guardianRelation" placeholder="যেমন: চাচা, মামা">
+        </div>
+        <div class="form-group">
+          <label>অভিভাবকের মোবাইল নম্বর</label>
+          <input type="tel" name="guardianPhone" placeholder="017xxxxxxxx">
+        </div>
+      </div>
+
+      <!-- ৪. যোগাযোগের ঠিকানা -->
+      <div class="section-title">৪. যোগাযোগের ঠিকানা</div>
+      <div class="grid">
+        <div class="form-group full-width">
+          <label>বর্তমান ঠিকানা *</label>
+          <textarea name="presentAddress" rows="2" required placeholder="গ্রাম/রাস্তা, ডাকঘর, উপজেলা, জেলা"></textarea>
+        </div>
+        <div class="form-group full-width">
+          <label>স্থায়ী ঠিকানা *</label>
+          <textarea name="permanentAddress" rows="2" required placeholder="গ্রাম/রাস্তা, ডাকঘর, উপজেলা, জেলা"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">আবেদন সাবমিট করুন</button>
+    </form>
+    <div id="status"></div>
+  </div>
+
+  <script>
+    // ⚠️ নিচে আপনার গুগল অ্যাপস স্ক্রিপ্টের Web App URL বসান ⚠️
+    const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+
+    const form = document.getElementById('admissionForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusDiv = document.getElementById('status');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'ডাটা প্রসেসিং হচ্ছে...';
+      statusDiv.innerText = '';
+
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+        .then(response => {
+          statusDiv.innerText = '🎉 আপনার ভর্তি আবেদন সফলভাবে জমা হয়েছে!';
+          statusDiv.style.color = '#2f855a';
+          form.reset();
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'আবেদন সাবমিট করুন';
+        })
+        .catch(error => {
+          statusDiv.innerText = '❌ ত্রুটি হয়েছে! আবার চেষ্টা করুন।';
+          statusDiv.style.color = '#c53030';
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'আবেদন সাবমিট করুন';
+        });
+    });
+  </script>
+</body>
+</html>
