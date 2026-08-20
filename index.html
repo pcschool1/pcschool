@@ -169,6 +169,86 @@
         <!-- 👇 [এখানে Students > Admission এর HTML ফর্ম বসবে] -->
         <section id="sec-admission" class="page-section">
             <h2>Student Admission</h2>
+            <h2><i class="fas fa-user-plus"></i> Student Admission</h2>
+<p style="margin-bottom: 15px; color: #666;">নতুন শিক্ষার্থীর ভর্তির তথ্য নিচে প্রদান করুন:</p>
+
+<form id="admissionForm" onsubmit="submitAdmissionForm(event)" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+    <div>
+        <label>শিক্ষার্থীর পূর্ণ নাম:</label>
+        <input type="text" name="studentName" required placeholder="উদাহরণ: রহিম আহমেদ" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+    
+    <div>
+        <label>শ্রেণি:</label>
+        <select name="className" required style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            <option value="">শ্রেণি নির্বাচন করুন</option>
+            <option value="Class 6">Class 6</option>
+            <option value="Class 7">Class 7</option>
+            <option value="Class 8">Class 8</option>
+            <option value="Class 9">Class 9</option>
+            <option value="Class 10">Class 10</option>
+        </select>
+    </div>
+
+    <div>
+        <label>রোল নম্বর:</label>
+        <input type="number" name="roll" required placeholder="উদাহরণ: 01" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <div>
+        <label>অভিভাবকের মোবাইল নম্বর:</label>
+        <input type="tel" name="phone" required placeholder="017xxxxxxxx" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <div style="grid-column: span 2;">
+        <label>ঠিকানা:</label>
+        <input type="text" name="address" value="কুড়িয়ানা, নেছারাবাদ, পিরোজপুর" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <div style="grid-column: span 2; margin-top: 10px;">
+        <button type="submit" id="subBtn" style="background: #1a237e; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            <i class="fas fa-save"></i> তথ্য সংরক্ষণ করুন
+        </button>
+    </div>
+</form>
+
+<div id="admissionResponse" style="margin-top: 15px; font-weight: bold;"></div>
+
+<script>
+function submitAdmissionForm(e) {
+    e.preventDefault();
+    const btn = document.getElementById('subBtn');
+    const responseDiv = document.getElementById('admissionResponse');
+    
+    btn.disabled = true;
+    responseDiv.style.color = "blue";
+    responseDiv.innerHTML = "ডাটা প্রসেস হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...";
+
+    const formData = new FormData(document.getElementById('admissionForm'));
+    const params = new URLSearchParams(formData);
+    params.append('action', 'addStudent');
+
+    fetch(scriptURL, { method: 'POST', body: params })
+    .then(res => res.json())
+    .then(data => {
+        btn.disabled = false;
+        if(data.status === 'success') {
+            responseDiv.style.color = "green";
+            responseDiv.innerHTML = "✅ " + data.message;
+            document.getElementById('admissionForm').reset();
+        } else {
+            responseDiv.style.color = "red";
+            responseDiv.innerHTML = "❌ ভুল হয়েছে: " + data.message;
+        }
+    })
+    .catch(err => {
+        btn.disabled = false;
+        responseDiv.style.color = "red";
+        responseDiv.innerHTML = "❌ সার্ভার কানেকশন ত্রুটি!";
+    });
+}
+</script>
+
             <!-- 🔴 Admission HTML Code Here -->
         </section>
 
