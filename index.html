@@ -1,194 +1,451 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PC School - ভর্তি আবেদন ফরম</title>
-  <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #f0f4f8; margin: 0; padding: 20px; }
-    .form-card { max-width: 800px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-    .header { text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 15px; margin-bottom: 25px; }
-    .header h1 { margin: 0; color: #1a365d; font-size: 28px; }
-    .header p { margin: 5px 0 0; color: #4a5568; }
-    
-    .section-title { background: #2b6cb0; color: white; padding: 8px 15px; border-radius: 5px; font-size: 18px; margin-top: 25px; margin-bottom: 15px; }
-    
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
-    .form-group { display: flex; flex-direction: column; }
-    .form-group.full-width { grid-column: 1 / -1; }
-    
-    label { font-weight: 600; margin-bottom: 5px; color: #2d3748; font-size: 14px; }
-    input, select, textarea { padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; outline: none; }
-    input:focus, select:focus, textarea:focus { border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.2); }
-    
-    .btn-submit { width: 100%; padding: 14px; background: #2f855a; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; transition: background 0.3s; }
-    .btn-submit:hover { background: #276749; }
-    #status { margin-top: 20px; text-align: center; font-weight: bold; font-size: 16px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC School Management System</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; background-color: #f4f7f6; }
+        
+        /* সাইডবার লেআউট */
+        .sidebar { width: 260px; background: #1a237e; color: white; height: 100vh; position: fixed; padding: 20px; overflow-y: auto; }
+        .logo { font-size: 20px; font-weight: bold; margin-bottom: 25px; display: flex; align-items: center; }
+        .menu-item { margin-bottom: 8px; }
+        .menu-item > a { color: #cfd8dc; text-decoration: none; display: flex; align-items: center; padding: 10px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .menu-item > a:hover { background: #283593; color: #fff; }
+        
+        /* ড্রপডাউন সাব-মেনু সিএসএস */
+        .submenu { list-style: none; padding-left: 20px; display: none; }
+        .submenu.show { display: block; }
+        .submenu li a { color: #90a4ae; text-decoration: none; display: block; padding: 6px 10px; font-size: 14px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        .submenu li a:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+
+        /* মূল কন্টেন্ট এরিয়া */
+        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 20px; min-height: 100vh; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .login-btn { background: #3f51b5; color: white; padding: 8px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+
+        /* সেকশন শো/হাইড লজিক */
+        .page-section { display: none; margin-top: 20px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .page-section.active { display: block; }
+
+        /* ড্যাশবোর্ড কার্ডসমূহ */
+        .stats-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 15px; }
+        .card { background: #e8eaf6; padding: 20px; border-radius: 8px; border-left: 4px solid #3f51b5; }
+
+        /* ফুটার */
+        .footer { margin-top: 40px; padding: 20px; background: white; text-align: center; border-radius: 8px; }
+    </style>
 </head>
 <body>
 
-  <div class="form-card">
-    <div class="header">
-      <h1>PC SCHOOL</h1>
-      <p>অনলাইন ভর্তি আবেদন ফরম - ২০২৬</p>
+    <!-- ========================================================= -->
+    <!-- ১. সাইডবার নেভিগেশন (Sidebar Navigation) -->
+    <!-- ========================================================= -->
+    <div class="sidebar">
+        <div class="logo"><i class="fas fa-school" style="margin-right:10px;"></i> PC SCHOOL</div>
+        
+        <!-- ১. Home -->
+        <div class="menu-item">
+            <a onclick="showSection('sec-home')"><i class="fas fa-home"></i>&nbsp; 1. Home</a>
+        </div>
+        
+        <!-- ২. Students -->
+        <div class="menu-item">
+            <a onclick="toggleMenu(this)"><i class="fas fa-user-graduate"></i>&nbsp; 2. Students <i class="fas fa-chevron-down" style="margin-left:auto; font-size:12px;"></i></a>
+            <ul class="submenu">
+                <li><a onclick="showSection('sec-admission')">Admission</a></li>
+                <li><a onclick="showSection('sec-student-list')">Student List</a></li>
+                <li><a onclick="showSection('sec-search-student')">Search Student</a></li>
+                <li><a onclick="showSection('sec-student-profile')">Student Profile</a></li>
+                <li><a onclick="showSection('sec-student-id')">Student ID Card</a></li>
+                <li><a onclick="showSection('sec-student-docs')">Documents</a></li>
+            </ul>
+        </div>
+
+        <!-- ৩. Teachers -->
+        <div class="menu-item">
+            <a onclick="toggleMenu(this)"><i class="fas fa-chalkboard-teacher"></i>&nbsp; 3. Teachers <i class="fas fa-chevron-down" style="margin-left:auto; font-size:12px;"></i></a>
+            <ul class="submenu">
+                <li><a onclick="showSection('sec-teacher-list')">Teacher List</a></li>
+                <li><a onclick="showSection('sec-add-teacher')">Add Teacher</a></li>
+                <li><a onclick="showSection('sec-teacher-profile')">Teacher Profile</a></li>
+                <li><a onclick="showSection('sec-subject-assign')">Subject Assignment</a></li>
+                <li><a onclick="showSection('sec-class-assign')">Class Assignment</a></li>
+            </ul>
+        </div>
+
+        <!-- ৪. Classes -->
+        <div class="menu-item">
+            <a onclick="toggleMenu(this)"><i class="fas fa-book"></i>&nbsp; 4. Classes <i class="fas fa-chevron-down" style="margin-left:auto; font-size:12px;"></i></a>
+            <ul class="submenu">
+                <li><a onclick="showSection('sec-class-list')">Class List</a></li>
+                <li><a onclick="showSection('sec-section-list')">Section</a></li>
+                <li><a onclick="showSection('sec-subject-list')">Subject</a></li>
+                <li><a onclick="showSection('sec-class-teacher')">Class Teacher</a></li>
+                <li><a onclick="showSection('sec-student-by-class')">Student by Class</a></li>
+                <li><a onclick="showSection('sec-class-routine')">Class Routine</a></li>
+            </ul>
+        </div>
+
+        <!-- ৫. Attendance -->
+        <div class="menu-item">
+            <a onclick="toggleMenu(this)"><i class="fas fa-calendar-check"></i>&nbsp; 5. Attendance <i class="fas fa-chevron-down" style="margin-left:auto; font-size:12px;"></i></a>
+            <ul class="submenu">
+                <li><a onclick="showSection('sec-take-attendance')">Take Attendance</a></li>
+                <li><a onclick="showSection('sec-today-attendance')">Today's Attendance</a></li>
+                <li><a onclick="showSection('sec-student-attendance')">Student Attendance</a></li>
+                <li><a onclick="showSection('sec-class-attendance')">Class Attendance</a></li>
+                <li><a onclick="showSection('sec-attendance-report')">Attendance Report</a></li>
+            </ul>
+        </div>
+
+        <!-- ৬. Examination -->
+        <div class="menu-item">
+            <a onclick="toggleMenu(this)"><i class="fas fa-file-alt"></i>&nbsp; 6. Examination <i class="fas fa-chevron-down" style="margin-left:auto; font-size:12px;"></i></a>
+            <ul class="submenu">
+                <li><a onclick="showSection('sec-exam-setup')">Exam Setup</a></li>
+                <li><a onclick="showSection('sec-exam-routine')">Exam Routine</a></li>
+                <li><a onclick="showSection('sec-marks-entry')">Marks Entry</a></li>
+                <li><a onclick="showSection('sec-student-result')">Student Result</a></li>
+                <li><a onclick="showSection('sec-class-result')">Class Result</a></li>
+                <li><a onclick="showSection('sec-marksheet')">Mark Sheet</a></li>
+            </ul>
+        </div>
+
+        <!-- ৭. Notice -->
+        <div class="menu-item">
+            <a onclick="toggleMenu(this)"><i class="fas fa-bullhorn"></i>&nbsp; 7. Notice <i class="fas fa-chevron-down" style="margin-left:auto; font-size:12px;"></i></a>
+            <ul class="submenu">
+                <li><a onclick="showSection('sec-new-notice')">New Notice</a></li>
+                <li><a onclick="showSection('sec-notice-list')">Notice List</a></li>
+                <li><a onclick="showSection('sec-edit-notice')">Edit Notice</a></li>
+                <li><a onclick="showSection('sec-published-notice')">Published Notice</a></li>
+                <li><a onclick="showSection('sec-notice-archive')">Notice Archive</a></li>
+            </ul>
+        </div>
+
+        <!-- ৮. User -->
+        <div class="menu-item">
+            <a onclick="toggleMenu(this)"><i class="fas fa-user-cog"></i>&nbsp; 8. User <i class="fas fa-chevron-down" style="margin-left:auto; font-size:12px;"></i></a>
+            <ul class="submenu">
+                <li><a onclick="showSection('sec-my-profile')">My Profile</a></li>
+                <li><a onclick="showSection('sec-change-pass')">Change Password</a></li>
+                <li><a onclick="showSection('sec-user-mgmt')">User Management</a></li>
+                <li><a onclick="showSection('sec-role-permission')">Role & Permission</a></li>
+                <li><a onclick="alert('Logging out...')">Logout</a></li>
+            </ul>
+        </div>
     </div>
 
-    <form id="admissionForm">
-      
-      <!-- ১. শিক্ষার্থীর তথ্য -->
-      <div class="section-title">১. শিক্ষার্থীর তথ্য</div>
-      <div class="grid">
-        <div class="form-group">
-          <label>শিক্ষার্থীর নাম (বাংলায়) *</label>
-          <input type="text" name="nameBn" required placeholder="বাংলায় নাম লিখুন">
+    <!-- ========================================================= -->
+    <!-- ২. মূল কন্টেন্ট এরিয়া (Main Content Body) -->
+    <!-- ========================================================= -->
+    <div class="main-content">
+        <div class="header">
+            <h3>Welcome to PC School</h3>
+            <a href="#" class="login-btn">🔑 Login</a>
         </div>
-        <div class="form-group">
-          <label>Student Name (English) *</label>
-          <input type="text" name="nameEn" required placeholder="Name in Block Capital">
-        </div>
-        <div class="form-group">
-          <label>ভর্তির শ্রেণী *</label>
-          <select name="targetClass" required>
-            <option value="">শ্রেণী নির্বাচন করুন</option>
-            <option value="Class 6">৬ষ্ঠ শ্রেণী</option>
-            <option value="Class 7">৭ম শ্রেণী</option>
-            <option value="Class 8">৮ম শ্রেণী</option>
-            <option value="Class 9">৯ম শ্রেণী</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>জন্ম নিবন্ধন নম্বর *</label>
-          <input type="number" name="birthReg" required placeholder="17 ডিজিটের জন্ম সনদ নম্বর">
-        </div>
-        <div class="form-group">
-          <label>জন্ম তারিখ *</label>
-          <input type="date" name="dob" required>
-        </div>
-        <div class="form-group">
-          <label>লিঙ্গ *</label>
-          <select name="gender" required>
-            <option value="">নির্বাচন করুন</option>
-            <option value="Male">ছাত্র</option>
-            <option value="Female">ছাত্রী</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>ধর্ম *</label>
-          <select name="religion" required>
-            <option value="">নির্বাচন করুন</option>
-            <option value="Islam">ইসলাম</option>
-            <option value="Hinduism">হিন্দু</option>
-            <option value="Buddhism">বৌদ্ধ</option>
-            <option value="Christianity">খ্রিস্টান</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>রক্তের গ্রুপ</label>
-          <select name="bloodGroup">
-            <option value="">নির্বাচন করুন</option>
-            <option value="A+">A+</option><option value="A-">A-</option>
-            <option value="B+">B+</option><option value="B-">B-</option>
-            <option value="O+">O+</option><option value="O-">O-</option>
-            <option value="AB+">AB+</option><option value="AB-">AB-</option>
-          </select>
-        </div>
-        <div class="form-group full-width">
-          <label>পূর্ববর্তী বিদ্যালয়ের নাম (যদি থাকে)</label>
-          <input type="text" name="prevSchool" placeholder="আগের স্কুলের নাম লিখুন">
-        </div>
-      </div>
 
-      <!-- ২. পিতা ও মাতার তথ্য -->
-      <div class="section-title">২. পিতা ও মাতার তথ্য</div>
-      <div class="grid">
-        <div class="form-group">
-          <label>পিতার নাম *</label>
-          <input type="text" name="fatherName" required placeholder="পিতার পুরো নাম">
-        </div>
-        <div class="form-group">
-          <label>পিতার এনআইডি (NID) *</label>
-          <input type="number" name="fatherNid" required placeholder="NID নম্বর">
-        </div>
-        <div class="form-group">
-          <label>পিতার মোবাইল নম্বর *</label>
-          <input type="tel" name="fatherPhone" required placeholder="017xxxxxxxx">
-        </div>
-        <div class="form-group">
-          <label>মাতার নাম *</label>
-          <input type="text" name="motherName" required placeholder="মাতার পুরো নাম">
-        </div>
-        <div class="form-group">
-          <label>মাতার এনআইডি (NID)</label>
-          <input type="number" name="motherNid" placeholder="NID নম্বর">
-        </div>
-      </div>
+        <!-- ------------------------------------------------------------- -->
+        <!-- [১. HOME / DASHBOARD SECTION - ডিফল্টভাবে সক্রিয় থাকবে] -->
+        <!-- ------------------------------------------------------------- -->
+        <section id="sec-home" class="page-section active">
+            <h2>School Overview</h2>
+            <div class="stats-container">
+                <div class="card"><h4>Total Students</h4><p>1,245</p></div>
+                <div class="card"><h4>Total Teachers</h4><p>48</p></div>
+                <div class="card"><h4>Total Classes</h4><p>32</p></div>
+                <div class="card"><h4>Total Staff</h4><p>18</p></div>
+            </div>
+        </section>
 
-      <!-- ৩. অভিভাবকের তথ্য (পিতা/মাতার অনুপস্থিতিতে) -->
-      <div class="section-title">৩. অভিভাবকের তথ্য (ঐচ্ছিক)</div>
-      <div class="grid">
-        <div class="form-group">
-          <label>অভিভাবকের নাম</label>
-          <input type="text" name="guardianName" placeholder="অভিভাবকের নাম">
+        <!-- ------------------------------------------------------------- -->
+        <!-- [২. STUDENTS MODULE SECTIONS] -->
+        <!-- ------------------------------------------------------------- -->
+        <!-- 👇 [এখানে Students > Admission এর HTML ফর্ম বসবে] -->
+        <section id="sec-admission" class="page-section">
+            <h2>Student Admission</h2>
+            <!-- 🔴 Admission HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Students > Student List এর HTML টেবিল/ডিজাইন বসবে] -->
+        <section id="sec-student-list" class="page-section">
+            <h2>Student List</h2>
+            <!-- 🔴 Student List HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Students > Search Student এর HTML সার্চ ফর্ম বসবে] -->
+        <section id="sec-search-student" class="page-section">
+            <h2>Search Student</h2>
+            <!-- 🔴 Search Student HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Students > Student Profile এর HTML কোড বসবে] -->
+        <section id="sec-student-profile" class="page-section">
+            <h2>Student Profile</h2>
+            <!-- 🔴 Student Profile HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Students > Student ID Card এর HTML কোড বসবে] -->
+        <section id="sec-student-id" class="page-section">
+            <h2>Student ID Card</h2>
+            <!-- 🔴 ID Card HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Students > Documents এর HTML ফাইল আপলোড কোড বসবে] -->
+        <section id="sec-student-docs" class="page-section">
+            <h2>Documents</h2>
+            <!-- 🔴 Documents HTML Code Here -->
+        </section>
+
+        <!-- ------------------------------------------------------------- -->
+        <!-- [৩. TEACHERS MODULE SECTIONS] -->
+        <!-- ------------------------------------------------------------- -->
+        <!-- 👇 [এখানে Teachers > Teacher List এর HTML কোড বসবে] -->
+        <section id="sec-teacher-list" class="page-section">
+            <h2>Teacher List</h2>
+            <!-- 🔴 Teacher List HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Teachers > Add Teacher এর HTML ফর্ম বসবে] -->
+        <section id="sec-add-teacher" class="page-section">
+            <h2>Add Teacher</h2>
+            <!-- 🔴 Add Teacher Form HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Teachers > Teacher Profile এর HTML কোড বসবে] -->
+        <section id="sec-teacher-profile" class="page-section">
+            <h2>Teacher Profile</h2>
+            <!-- 🔴 Teacher Profile HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Teachers > Subject Assignment এর HTML কোড বসবে] -->
+        <section id="sec-subject-assign" class="page-section">
+            <h2>Subject Assignment</h2>
+            <!-- 🔴 Subject Assignment HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Teachers > Class Assignment এর HTML কোড বসবে] -->
+        <section id="sec-class-assign" class="page-section">
+            <h2>Class Assignment</h2>
+            <!-- 🔴 Class Assignment HTML Code Here -->
+        </section>
+
+        <!-- ------------------------------------------------------------- -->
+        <!-- [৪. CLASSES MODULE SECTIONS] -->
+        <!-- ------------------------------------------------------------- -->
+        <!-- 👇 [এখানে Classes > Class List এর HTML কোড বসবে] -->
+        <section id="sec-class-list" class="page-section">
+            <h2>Class List</h2>
+            <!-- 🔴 Class List HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Classes > Section এর HTML কোড বসবে] -->
+        <section id="sec-section-list" class="page-section">
+            <h2>Class Sections</h2>
+            <!-- 🔴 Section Management HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Classes > Subject এর HTML কোড বসবে] -->
+        <section id="sec-subject-list" class="page-section">
+            <h2>Subjects</h2>
+            <!-- 🔴 Subject List HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Classes > Class Teacher এর HTML কোড বসবে] -->
+        <section id="sec-class-teacher" class="page-section">
+            <h2>Class Teacher Assign</h2>
+            <!-- 🔴 Class Teacher HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Classes > Student by Class এর HTML কোড বসবে] -->
+        <section id="sec-student-by-class" class="page-section">
+            <h2>Student by Class</h2>
+            <!-- 🔴 Student Filter HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Classes > Class Routine এর HTML টেবিল বসবে] -->
+        <section id="sec-class-routine" class="page-section">
+            <h2>Class Routine</h2>
+            <!-- 🔴 Class Routine HTML Table Here -->
+        </section>
+
+        <!-- ------------------------------------------------------------- -->
+        <!-- [৫. ATTENDANCE MODULE SECTIONS] -->
+        <!-- ------------------------------------------------------------- -->
+        <!-- 👇 [এখানে Attendance > Take Attendance এর HTML উপস্থিতি শিট বসবে] -->
+        <section id="sec-take-attendance" class="page-section">
+            <h2>Take Attendance</h2>
+            <!-- 🔴 Attendance Sheet HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Attendance > Today's Attendance এর HTML কোড বসবে] -->
+        <section id="sec-today-attendance" class="page-section">
+            <h2>Today's Attendance</h2>
+            <!-- 🔴 Today's Summary HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Attendance > Student Attendance এর HTML কোড বসবে] -->
+        <section id="sec-student-attendance" class="page-section">
+            <h2>Student Attendance History</h2>
+            <!-- 🔴 Student History HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Attendance > Class Attendance এর HTML কোড বসবে] -->
+        <section id="sec-class-attendance" class="page-section">
+            <h2>Class Attendance Overview</h2>
+            <!-- 🔴 Class Attendance HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Attendance > Attendance Report এর HTML কোড বসবে] -->
+        <section id="sec-attendance-report" class="page-section">
+            <h2>Attendance Report</h2>
+            <!-- 🔴 Attendance Report HTML Code Here -->
+        </section>
+
+        <!-- ------------------------------------------------------------- -->
+        <!-- [৬. EXAMINATION MODULE SECTIONS] -->
+        <!-- ------------------------------------------------------------- -->
+        <!-- 👇 [এখানে Examination > Exam Setup এর HTML কোড বসবে] -->
+        <section id="sec-exam-setup" class="page-section">
+            <h2>Exam Setup</h2>
+            <!-- 🔴 Exam Setup HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Examination > Exam Routine এর HTML কোড বসবে] -->
+        <section id="sec-exam-routine" class="page-section">
+            <h2>Exam Routine</h2>
+            <!-- 🔴 Exam Routine HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Examination > Marks Entry এর HTML নম্বর ইনপুট ফর্ম বসবে] -->
+        <section id="sec-marks-entry" class="page-section">
+            <h2>Marks Entry</h2>
+            <!-- 🔴 Marks Entry Form HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Examination > Student Result এর HTML কোড বসবে] -->
+        <section id="sec-student-result" class="page-section">
+            <h2>Student Result</h2>
+            <!-- 🔴 Student Result HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Examination > Class Result এর HTML কোড বসবে] -->
+        <section id="sec-class-result" class="page-section">
+            <h2>Class Result</h2>
+            <!-- 🔴 Class Result HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Examination > Mark Sheet এর HTML ডিজাইন বসবে] -->
+        <section id="sec-marksheet" class="page-section">
+            <h2>Mark Sheet</h2>
+            <!-- 🔴 Mark Sheet Card HTML Code Here -->
+        </section>
+
+        <!-- ------------------------------------------------------------- -->
+        <!-- [৭. NOTICE MODULE SECTIONS] -->
+        <!-- ------------------------------------------------------------- -->
+        <!-- 👇 [এখানে Notice > New Notice এর HTML ফর্ম বসবে] -->
+        <section id="sec-new-notice" class="page-section">
+            <h2>New Notice</h2>
+            <!-- 🔴 New Notice Form HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Notice > Notice List এর HTML কোড বসবে] -->
+        <section id="sec-notice-list" class="page-section">
+            <h2>Notice List</h2>
+            <!-- 🔴 Notice List HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Notice > Edit Notice এর HTML কোড বসবে] -->
+        <section id="sec-edit-notice" class="page-section">
+            <h2>Edit Notice</h2>
+            <!-- 🔴 Edit Notice HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Notice > Published Notice এর HTML ভিউ বসবে] -->
+        <section id="sec-published-notice" class="page-section">
+            <h2>Published Notice</h2>
+            <!-- 🔴 Published Notice View HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে Notice > Notice Archive এর HTML কোড বসবে] -->
+        <section id="sec-notice-archive" class="page-section">
+            <h2>Notice Archive</h2>
+            <!-- 🔴 Notice Archive HTML Code Here -->
+        </section>
+
+        <!-- ------------------------------------------------------------- -->
+        <!-- [৮. USER MODULE SECTIONS] -->
+        <!-- ------------------------------------------------------------- -->
+        <!-- 👇 [এখানে User > My Profile এর HTML কোড বসবে] -->
+        <section id="sec-my-profile" class="page-section">
+            <h2>My Profile</h2>
+            <!-- 🔴 User Profile HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে User > Change Password এর HTML পাসওয়ার্ড ফর্ম বসবে] -->
+        <section id="sec-change-pass" class="page-section">
+            <h2>Change Password</h2>
+            <!-- 🔴 Change Password Form HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে User > User Management এর HTML কোড বসবে] -->
+        <section id="sec-user-mgmt" class="page-section">
+            <h2>User Management</h2>
+            <!-- 🔴 User Management HTML Code Here -->
+        </section>
+
+        <!-- 👇 [এখানে User > Role & Permission এর HTML কোড বসবে] -->
+        <section id="sec-role-permission" class="page-section">
+            <h2>Role & Permission</h2>
+            <!-- 🔴 Role Permission HTML Code Here -->
+        </section>
+
+        <!-- ------------------------------------------------------------- -->
+        <!-- [ফুটার সেকশন] -->
+        <!-- ------------------------------------------------------------- -->
+        <div class="footer">
+            <p><strong>Address:</strong> কুড়িয়ানা, নেছারাবাদ, পিরোজপুর</p>
+            <p>&copy; 2026 PC School. All Rights Reserved.</p>
         </div>
-        <div class="form-group">
-          <label>সম্পর্ক</label>
-          <input type="text" name="guardianRelation" placeholder="যেমন: চাচা, মামা">
-        </div>
-        <div class="form-group">
-          <label>অভিভাবকের মোবাইল নম্বর</label>
-          <input type="tel" name="guardianPhone" placeholder="017xxxxxxxx">
-        </div>
-      </div>
+    </div>
 
-      <!-- ৪. যোগাযোগের ঠিকানা -->
-      <div class="section-title">৪. যোগাযোগের ঠিকানা</div>
-      <div class="grid">
-        <div class="form-group full-width">
-          <label>বর্তমান ঠিকানা *</label>
-          <textarea name="presentAddress" rows="2" required placeholder="গ্রাম/রাস্তা, ডাকঘর, উপজেলা, জেলা"></textarea>
-        </div>
-        <div class="form-group full-width">
-          <label>স্থায়ী ঠিকানা *</label>
-          <textarea name="permanentAddress" rows="2" required placeholder="গ্রাম/রাস্তা, ডাকঘর, উপজেলা, জেলা"></textarea>
-        </div>
-      </div>
+    <!-- ========================================================= -->
+    <!-- ৩. জাভাস্ক্রিপ্ট ইঞ্জিন ও ওয়েব অ্যাপ লিংক (JavaScript Engine) -->
+    <!-- ========================================================= -->
+    <script>
+        // 📌 ---------------------------------------------------------------------
+        // 🔴 গুগল অ্যাপস স্ক্রিপ্ট (Web App URL) লিংকটি নিচের একক উদ্ধৃতি চিহ্নের ('') ভেতরে বসাবেন:
+        // 📌 ---------------------------------------------------------------------
+        const scriptURL = 'https://script.google.com/macros/s/YOUR_APPS_SCRIPT_DEPLOYMENT_ID/exec';
 
-      <button type="submit" class="btn-submit" id="submitBtn">আবেদন সাবমিট করুন</button>
-    </form>
-    <div id="status"></div>
-  </div>
 
-  <script>
-    // ⚠️ নিচে আপনার গুগল অ্যাপস স্ক্রিপ্টের Web App URL বসান ⚠️
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyMDmHn4e6BPocB1EvbHP49bsioMRVBoLjEr4LRzeqyJtUSYagTqp5FXE7mALgUZVAyAg/exec';
+        // ১. সাইডবার সাব-মেনু ড্রপডাউন টগল ফাংশন
+        function toggleMenu(element) {
+            const submenu = element.nextElementSibling;
+            if (submenu && submenu.classList.contains('submenu')) {
+                submenu.classList.toggle('show');
+            }
+        }
 
-    const form = document.getElementById('admissionForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const statusDiv = document.getElementById('status');
+        // ২. অন-ক্লিক নির্দিষ্ট পেজ সেকশন স্ক্রিনে দেখানোর ফাংশন
+        function showSection(sectionId) {
+            // সকল সেকশন লুকিয়ে ফেলা
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(sec => sec.classList.remove('active'));
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      submitBtn.disabled = true;
-      submitBtn.innerText = 'ডাটা প্রসেসিং হচ্ছে...';
-      statusDiv.innerText = '';
-
-      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-        .then(response => {
-          statusDiv.innerText = '🎉 আপনার ভর্তি আবেদন সফলভাবে জমা হয়েছে!';
-          statusDiv.style.color = '#2f855a';
-          form.reset();
-          submitBtn.disabled = false;
-          submitBtn.innerText = 'আবেদন সাবমিট করুন';
-        })
-        .catch(error => {
-          statusDiv.innerText = '❌ ত্রুটি হয়েছে! আবার চেষ্টা করুন।';
-          statusDiv.style.color = '#c53030';
-          submitBtn.disabled = false;
-          submitBtn.innerText = 'আবেদন সাবমিট করুন';
-        });
-    });
-  </script>
+            // শুধুমাত্র কাঙ্ক্ষিত সেকশনটি স্ক্রিনে নিয়ে আসা
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+    </script>
 </body>
 </html>
