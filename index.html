@@ -820,6 +820,70 @@ function printStudentList() {
     printWindow.document.close();
     printWindow.print();
 }
+    function searchStudentProfile() {
+    const studentId = document.getElementById('profileSearchId').value.trim();
+    if(!studentId) {
+        alert('অনুগ্রহ করে একটি স্টুডেন্ট আইডি লিখুন!');
+        return;
+    }
+
+    const container = document.getElementById('profileContainer');
+    const printBtn = document.getElementById('btnPrintProfile');
+    container.style.display = 'none';
+    printBtn.style.display = 'none';
+
+    const params = new URLSearchParams();
+    params.append('action', 'getStudentProfile');
+    params.append('studentId', studentId);
+
+    fetch(scriptURL, { method: 'POST', body: params })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === 'success') {
+            const s = data.student;
+            document.getElementById('p_id').innerText = s.id;
+            document.getElementById('p_name').innerText = s.name;
+            document.getElementById('p_class_sec').innerText = `${s.className} (${s.section})`;
+            document.getElementById('p_roll').innerText = s.roll;
+            document.getElementById('p_father').innerText = s.father;
+            document.getElementById('p_mother').innerText = s.mother;
+            document.getElementById('p_guardian').innerText = s.guardian;
+            document.getElementById('p_religion_blood').innerText = `${s.religion || 'N/A'} | Blood Group: ${s.blood || 'N/A'}`;
+            document.getElementById('p_phone').innerText = s.phone;
+            document.getElementById('p_address').innerText = s.address;
+
+            const photoBox = document.getElementById('profilePhotoBox');
+            if(s.photo && s.photo.startsWith('http')) {
+                photoBox.innerHTML = `<img src="${s.photo}" style="width:100%; height:100%; object-fit:cover; border-radius:3px;">`;
+            } else {
+                photoBox.innerHTML = `<i class="fas fa-user-circle" style="font-size: 60px; color: #ccc;"></i>`;
+            }
+
+            container.style.display = 'block';
+            printBtn.style.display = 'inline-block';
+        } else {
+            alert('শিক্ষার্থী পাওয়া যায়নি! আইডিটি চেক করুন।');
+        }
+    })
+    .catch(() => {
+        alert('ডাটা লোড করতে সমস্যা হয়েছে! কানেকশন চেক করুন।');
+    });
+}
+
+function printStudentProfile() {
+    const printContents = document.getElementById('printableProfileCard').innerHTML;
+    const printWindow = window.open('', '', 'height=700,width=900');
+    printWindow.document.write('<html><head><title>Student Profile - PC School</title>');
+    printWindow.document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">');
+    printWindow.document.write('<style>body { font-family: Arial, sans-serif; padding: 20px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #ddd; padding: 8px; }</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printContents);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); }, 500);
+}
+
 
     </script>
 </body>
