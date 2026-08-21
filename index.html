@@ -427,6 +427,64 @@ function resetAdmissionForm() {
         <!-- 👇 [এখানে Students > Student Profile এর HTML কোড বসবে] -->
         <section id="sec-student-profile" class="page-section">
             <h2>Student Profile</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e8eaf6; padding-bottom: 10px; margin-bottom: 15px;">
+    <h2><i class="fas fa-id-card-alt"></i> Student Profile CV</h2>
+    <button onclick="printStudentProfile()" id="btnPrintProfile" style="background: #2e7d32; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none;">
+        <i class="fas fa-print"></i> প্রিন্ট / PDF ডাউলোড
+    </button>
+</div>
+
+<!-- সার্চ বক্স -->
+<div style="background: #f5f5f5; padding: 15px; border-radius: 6px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+    <input type="text" id="profileSearchId" placeholder="শিক্ষার্থীর আইডি লিখুন (যেমন: ST1001)..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px;">
+    <button onclick="searchStudentProfile()" style="background: #1a237e; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+        <i class="fas fa-search"></i> প্রোফাইল খুঁজুন
+    </button>
+</div>
+
+<!-- প্রোফাইল কার্ড (সিভি ফরম্যাট) -->
+<div id="profileContainer" style="display: none;">
+    <div id="printableProfileCard" style="background: white; border: 2px solid #1a237e; padding: 25px; border-radius: 8px; max-width: 800px; margin: 0 auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        
+        <!-- সিভি হেডার (স্কুল নাম ও ছবি) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1a237e; padding-bottom: 15px; margin-bottom: 20px;">
+            <div>
+                <h1 style="margin: 0; color: #1a237e; font-size: 24px;">PC SCHOOL & COLLEGE</h1>
+                <p style="margin: 3px 0 0 0; color: #555; font-size: 13px;">কুড়িয়ানা, নেছারাবাদ, পিরোজপুর</p>
+                <span style="display: inline-block; background: #1a237e; color: white; padding: 3px 10px; font-size: 12px; margin-top: 8px; border-radius: 3px; font-weight: bold;">STUDENT PROFILE</span>
+            </div>
+            <div id="profilePhotoBox" style="width: 100px; height: 115px; border: 2px dashed #1a237e; display: flex; align-items: center; justify-content: center; background: #fafafa; border-radius: 4px;">
+                <i class="fas fa-user-circle" style="font-size: 60px; color: #ccc;"></i>
+            </div>
+        </div>
+
+        <!-- প্রধান তথ্য টেবিল -->
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+            <tr style="background: #e8eaf6;"><th colspan="2" style="padding: 8px; text-align: left; color: #1a237e; border: 1px solid #c5cae9;"><i class="fas fa-user"></i> মৌলিক তথ্য (Basic Info)</th></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; width: 30%; font-weight: bold;">আইডি নম্বর (ID)</td><td id="p_id" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">শিক্ষার্থীর নাম</td><td id="p_name" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">শ্রেণি ও সেকশন</td><td id="p_class_sec" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">রোল নম্বর</td><td id="p_roll" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+
+            <tr style="background: #e8eaf6;"><th colspan="2" style="padding: 8px; text-align: left; color: #1a237e; border: 1px solid #c5cae9;"><i class="fas fa-users"></i> অভিভাবকের তথ্য (Guardian Details)</th></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">পিতার নাম</td><td id="p_father" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">মাতার নাম</td><td id="p_mother" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">অভিভাবকের নাম</td><td id="p_guardian" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+
+            <tr style="background: #e8eaf6;"><th colspan="2" style="padding: 8px; text-align: left; color: #1a237e; border: 1px solid #c5cae9;"><i class="fas fa-info-circle"></i> অন্যান্য ও যোগাযোগ (Personal & Contact)</th></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">ধর্ম ও রক্ত গ্রুপ</td><td id="p_religion_blood" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">মোবাইল নম্বর</td><td id="p_phone" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">ঠিকানা</td><td id="p_address" style="padding: 8px; border: 1px solid #ddd;">-</td></tr>
+        </table>
+
+        <!-- ফুটার স্বাক্ষর -->
+        <div style="display: flex; justify-content: space-between; margin-top: 40px; padding-top: 10px;">
+            <div style="text-align: center; border-top: 1px solid #999; width: 150px; font-size: 12px; color: #555;">অভিভাবকের স্বাক্ষর</div>
+            <div style="text-align: center; border-top: 1px solid #999; width: 150px; font-size: 12px; color: #555;">প্রধান শিক্ষকের স্বাক্ষর</div>
+        </div>
+    </div>
+</div>
+
             <!-- 🔴 Student Profile HTML Code Here -->
         </section>
 
