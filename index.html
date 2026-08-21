@@ -491,6 +491,83 @@ function resetAdmissionForm() {
         <!-- 👇 [এখানে Students > Student ID Card এর HTML কোড বসবে] -->
         <section id="sec-student-id" class="page-section">
             <h2>Student ID Card</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e8eaf6; padding-bottom: 10px; margin-bottom: 15px;">
+    <h2><i class="fas fa-id-card"></i> Student ID Card Generator</h2>
+    <button onclick="printStudentIdCard()" id="btnPrintIdCard" style="background: #2e7d32; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none;">
+        <i class="fas fa-print"></i> আইডি কার্ড প্রিন্ট করুন
+    </button>
+</div>
+
+<!-- সার্চ বক্স -->
+<div style="background: #f5f5f5; padding: 15px; border-radius: 6px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+    <input type="text" id="idCardSearchInput" placeholder="শিক্ষার্থীর আইডি লিখুন (যেমন: ST1001)..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px;">
+    <button onclick="searchStudentIdCard()" style="background: #1a237e; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+        <i class="fas fa-search"></i> কার্ড তৈরি করুন
+    </button>
+</div>
+
+<!-- আইডি কার্ড ডিসপ্লে (Front & Back Side) -->
+<div id="idCardContainer" style="display: none; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+    <div id="printableIdCardArea" style="display: flex; gap: 20px; flex-wrap: wrap;">
+        
+        <!-- FRONT SIDE -->
+        <div style="width: 270px; height: 430px; border: 2px solid #1a237e; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.15); display: flex; flex-direction: column; position: relative;">
+            <div style="background: linear-gradient(135deg, #1a237e, #283593); color: white; text-align: center; padding: 12px 5px;">
+                <h3 style="margin: 0; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">PC SCHOOL & COLLEGE</h3>
+                <p style="margin: 2px 0 0 0; font-size: 10px; opacity: 0.85;">কুড়িয়ানা, নেছারাবাদ, পিরোজপুর</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <div id="cardPhotoBox" style="width: 95px; height: 95px; margin: 0 auto; border-radius: 50%; border: 3px solid #1a237e; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #f0f4c3;">
+                    <i class="fas fa-user-circle" style="font-size: 70px; color: #1a237e;"></i>
+                </div>
+                <h3 id="card_name" style="margin: 10px 0 2px 0; color: #1a237e; font-size: 16px; font-weight: bold;">-</h3>
+                <span style="background: #e8eaf6; color: #1a237e; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold;">STUDENT</span>
+            </div>
+
+            <div style="padding: 15px 20px; font-size: 12px; color: #333; flex-grow: 1;">
+                <table style="width: 100%; border-collapse: collapse; line-height: 1.8;">
+                    <tr><td style="font-weight: bold; width: 40%; color: #555;">ID NO:</td><td id="card_id" style="font-weight: bold; color: #1a237e;">-</td></tr>
+                    <tr><td style="font-weight: bold; color: #555;">CLASS:</td><td id="card_class_sec">-</td></tr>
+                    <tr><td style="font-weight: bold; color: #555;">ROLL NO:</td><td id="card_roll">-</td></tr>
+                    <tr><td style="font-weight: bold; color: #555;">BLOOD:</td><td id="card_blood" style="color: #c62828; font-weight: bold;">-</td></tr>
+                    <tr><td style="font-weight: bold; color: #555;">PHONE:</td><td id="card_phone">-</td></tr>
+                </table>
+            </div>
+
+            <div style="background: #1a237e; height: 12px; width: 100%;"></div>
+        </div>
+
+        <!-- BACK SIDE -->
+        <div style="width: 270px; height: 430px; border: 2px solid #1a237e; border-radius: 12px; overflow: hidden; background: #fafafa; box-shadow: 0 4px 8px rgba(0,0,0,0.15); display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="background: #1a237e; color: white; text-align: center; padding: 8px 5px;">
+                <h4 style="margin: 0; font-size: 12px; text-transform: uppercase;">জরুরি নির্দেশনাবলী</h4>
+            </div>
+
+            <div style="padding: 15px; font-size: 11px; color: #444; line-height: 1.6;">
+                <ul style="margin: 0; padding-left: 15px;">
+                    <li style="margin-bottom: 6px;">এই কার্ডটি বিদ্যালয়ের সম্পত্তি। প্রতিদিন কার্ড পরিধান করা বাধ্যতামূলক।</li>
+                    <li style="margin-bottom: 6px;">কার্ডটি হস্তান্তরযোগ্য নয়।</li>
+                    <li style="margin-bottom: 6px;">কার্ডটি হারিয়ে গেলে তাৎক্ষণিকভাবে অফিস কক্ষে অবহিত করতে হবে।</li>
+                </ul>
+                
+                <div style="margin-top: 15px; background: #e8eaf6; padding: 8px; border-radius: 4px; text-align: center; border: 1px dashed #1a237e;">
+                    <strong style="color: #1a237e; font-size: 10px; display: block;">কার্ডটি পাওয়া গেলে যোগাযোগের ঠিকানা:</strong>
+                    <span style="font-size: 10px; color: #333;">PC School, কুড়িয়ানা, নেছারাবাদ, পিরোজপুর।</span>
+                </div>
+            </div>
+
+            <div style="padding: 10px 15px 15px 15px; text-align: center;">
+                <div style="border-top: 1px dashed #333; width: 120px; margin: 0 auto 3px auto;"></div>
+                <span style="font-size: 10px; font-weight: bold; color: #555;">প্রধান শিক্ষকের স্বাক্ষর</span>
+            </div>
+
+            <div style="background: #1a237e; height: 12px; width: 100%;"></div>
+        </div>
+
+    </div>
+</div>
+
             <!-- 🔴 ID Card HTML Code Here -->
         </section>
 
