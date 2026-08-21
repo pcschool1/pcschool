@@ -960,6 +960,65 @@ function printStudentProfile() {
     printWindow.focus();
     setTimeout(() => { printWindow.print(); }, 500);
 }
+function searchStudentIdCard() {
+    const studentId = document.getElementById('idCardSearchInput').value.trim();
+    if(!studentId) {
+        alert('অনুগ্রহ করে একটি স্টুডেন্ট আইডি লিখুন!');
+        return;
+    }
+
+    const container = document.getElementById('idCardContainer');
+    const printBtn = document.getElementById('btnPrintIdCard');
+    container.style.display = 'none';
+    printBtn.style.display = 'none';
+
+    const params = new URLSearchParams();
+    params.append('action', 'getStudentIdCard');
+    params.append('studentId', studentId);
+
+    fetch(scriptURL, { method: 'POST', body: params })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === 'success') {
+            const s = data.student;
+            document.getElementById('card_id').innerText = s.id;
+            document.getElementById('card_name').innerText = s.name;
+            document.getElementById('card_class_sec').innerText = `${s.className} (${s.section})`;
+            document.getElementById('card_roll').innerText = s.roll;
+            document.getElementById('card_blood').innerText = s.blood || 'N/A';
+            document.getElementById('card_phone').innerText = s.phone || 'N/A';
+
+            const photoBox = document.getElementById('cardPhotoBox');
+            if(s.photo && s.photo.startsWith('http')) {
+                photoBox.innerHTML = `<img src="${s.photo}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+            } else {
+                photoBox.innerHTML = `<i class="fas fa-user-circle" style="font-size: 70px; color: #1a237e;"></i>`;
+            }
+
+            container.style.display = 'flex';
+            printBtn.style.display = 'inline-block';
+        } else {
+            alert('শিক্ষার্থী পাওয়া যায়নি! আইডিটি চেক করুন।');
+        }
+    })
+    .catch(() => {
+        alert('ডাটা লোড করতে সমস্যা হয়েছে! কানেকশন চেক করুন।');
+    });
+}
+
+function printStudentIdCard() {
+    const printContents = document.getElementById('printableIdCardArea').innerHTML;
+    const printWindow = window.open('', '', 'height=700,width=900');
+    printWindow.document.write('<html><head><title>Student ID Card - PC School</title>');
+    printWindow.document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">');
+    printWindow.document.write('<style>body { font-family: Arial, sans-serif; padding: 20px; display: flex; justify-content: center; gap: 20px; background: white; } @media print { body { padding: 0; } }</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printContents);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); }, 500);
+}
 
 
     </script>
